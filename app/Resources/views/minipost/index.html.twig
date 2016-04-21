@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Minipost list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Createdat</th>
+                <th>Updatedat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for minipost in miniposts %}
+            <tr>
+                <td><a href="{{ path('minipost_show', { 'id': minipost.id }) }}">{{ minipost.id }}</a></td>
+                <td>{{ minipost.title }}</td>
+                <td>{{ minipost.content }}</td>
+                <td>{% if minipost.createdAt %}{{ minipost.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if minipost.updatedAt %}{{ minipost.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('minipost_show', { 'id': minipost.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('minipost_edit', { 'id': minipost.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('minipost_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

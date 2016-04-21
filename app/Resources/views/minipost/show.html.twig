@@ -1,0 +1,221 @@
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+  <script type="text/javascript">
+    $( document ).ready(function() {
+      console.log( "ready!" );
+      $('#new_comment').submit(function(e) {  
+	  var valuesToSubmit = $(this).serialize();
+	  $.ajax({
+	      type: "POST",
+	      url: $(this).attr('action'), //sumbits it to the given url of the form
+	      data: valuesToSubmit,
+	      dataType: "JSON", // you want a difference between normal and ajax-calls, and json is standard
+	      statusCode: {
+		500: function(xhr) {
+		  if(window.console) console.log(xhr.responseText);
+		},
+		201: function(xhr){
+		  $("#comment_content").val("").change()
+		  var message="Comentario creado"
+		  /*$.each(data.errors, function(key, value){
+		    message+="<br>"+value.message
+		    $("#item_"+value.field).addClass("error")
+		  })*/
+		  $("#messageComment").removeClass("alert alert-danger").addClass("alert alert-success").html(message)
+		  $('html, body').animate({
+		    scrollTop: $("#messageComment").offset().top
+		  }, 1000);
+		  setTimeout(function(){ $("#messageComment").addClass("hidden"); }, 3000);
+		},
+		422: function(xhr){
+		  var message="Comentario no se ha creado"
+		  /*$.each(data.errors, function(key, value){
+		    message+="<br>"+value.message
+		    $("#item_"+value.field).addClass("error")
+		  })*/
+		  $("#messageComment").removeClass("alert alert-success").addClass("alert alert-danger").html(message)
+		  $('html, body').animate({
+		    scrollTop: $("#messageComment").offset().top
+		  }, 1000);
+		  setTimeout(function(){ $("#messageComment").addClass("hidden"); }, 3000);
+		},
+                200: function (data){
+                    if(data.status=="success"){
+                        alert("comentario creado con exito")
+                    }
+                    if(data.status=="error"){
+                        alert("comentario con error")
+                    }
+                }
+	      }
+	  }).success(function(json){
+	      console.log("success", json);
+	  });
+	  return false; // prevents normal behaviour
+          e.preventDefault();
+      });
+    });
+  </script>
+{% endblock %}
+{% block body %}
+<div class="row">
+  <!-- Blog Post Content Column -->
+  
+  <div class="col-lg-8">
+    <!--
+      <div id="notice" class="alert alert-success"><%= notice %></div>
+    -->
+    <!-- Blog Post -->
+    <!-- Title -->
+    <h1>{{ minipost.title }}</h1>
+    <!-- Author -->
+    <p class="lead">
+      Autor:&nbsp;{{ minipost.user }}
+    </p>
+    <hr>
+    <!-- Date/Time -->
+    <p>
+      <span class="glyphicon glyphicon-time"></span> Publicado el: {% if minipost.createdAt %}{{ minipost.createdAt|date('Y-m-d H:i:s') }}{% endif %}
+    </p>
+    <hr>
+    <p>
+    {{ minipost.category }}
+    </p>
+    <hr>
+    <!-- Preview Image -->
+    <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+    <hr>
+    <!-- Post Content -->
+    {{ minipost.content }}
+    <!--p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, tenetur natus doloremque laborum quos iste ipsum rerum obcaecati impedit odit illo dolorum ab tempora nihil dicta earum fugiat. Temporibus, voluptatibus.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, doloribus, dolorem iusto blanditiis unde eius illum consequuntur neque dicta incidunt ullam ea hic porro optio ratione repellat perspiciatis. Enim, iure!</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error, nostrum, aliquid, animi, ut quas placeat totam sunt tempora commodi nihil ullam alias modi dicta saepe minima ab quo voluptatem obcaecati?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae? Qui, necessitatibus, est!</p-->
+    <hr>
+    <p>
+        
+        <a href="{{ path('minipost_edit', { 'id': minipost.id }) }}">Edit</a> |
+        <a href="{{ path('minipost_index') }}">Back to the list</a>
+        {{ form_start(delete_form) }}
+            <input type="submit" value="Delete">
+        {{ form_end(delete_form) }}
+    </p>
+    <hr>
+    <!-- Blog Comments -->
+    <!-- Comments Form -->
+    <div class="well">
+      <h4>Leave a Comment:</h4>
+	<div id="messageComment"></div>
+	{{ form_start(comment_form, {'attr': {'id': 'new_comment'}}) }}
+            <div class="form-group">
+                {{ form_row(comment_form.content) }}
+            </div>
+	{{ form_end(comment_form) }}
+	  
+    </div>
+    <hr>
+    <!-- Posted Comments -->
+    <!-- Comment -->
+    {% for comment in minipost.comments %}
+    <div class="media">
+      <a class="pull-left" href="#">
+	<img class="media-object" src="http://placehold.it/64x64" alt="">
+      </a>
+      <div class="media-body">
+	<h4 class="media-heading">{{ comment.user }}
+	  <small>{% if comment.createdAt %}{{ comment.createdAt|date('Y-m-d H:i:s') }}{% endif %}</small>
+        </h4>
+        {{ comment.content }}
+            {% for nested_comment in comment.nestedComments %}
+	  <!-- Nested Comment -->
+	  <div class="media">
+	    <a class="pull-left" href="#">
+	      <img class="media-object" src="http://placehold.it/64x64" alt="">
+	    </a>
+	    <div class="media-body">
+	      <h4 class="media-heading">{{ nested_comment.user }}
+		<small>{% if nested_comment.createdAt %}{{ nested_comment.createdAt|date('Y-m-d H:i:s') }}{% endif %}</small>
+	      </h4>
+	      {{ nested_comment.content }}
+	    </div>
+	  </div>
+	  <!-- End Nested Comment -->
+	  {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  
+  <!-- Blog Sidebar Widgets Column -->
+  <div class="col-md-4">
+    <!-- Blog Search Well -->
+    <div class="well">
+    <h4>Blog Search</h4>
+      <div class="input-group">
+	<input type="text" class="form-control">
+	<span class="input-group-btn">
+          <button class="btn btn-default" type="button">
+	    <span class="glyphicon glyphicon-search"></span>
+          </button>
+	</span>
+      </div>
+      <!-- /.input-group -->
+    </div>
+    <!-- Blog Categories Well -->
+    <div class="well">
+      <h4>Blog Categories</h4>
+	<div class="row">
+	  <div class="col-lg-6">
+	    <ul class="list-unstyled">
+	      <li>
+		<a href="#">Category Name</a>
+              </li>
+              <li>
+		<a href="#">Category Name</a>
+              </li>
+              <li>
+		<a href="#">Category Name</a>
+              </li>
+	      <li>
+		<a href="#">Category Name</a>
+              </li>
+	    </ul>
+          </div>
+          <div class="col-lg-6">
+	    <ul class="list-unstyled">
+	      <li>
+		<a href="#">Category Name</a>
+              </li>
+              <li>
+		<a href="#">Category Name</a>
+              </li>
+              <li>
+		<a href="#">Category Name</a>
+              </li>
+              <li>
+		<a href="#">Category Name</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+	<!-- /.row -->
+      </div>
+      <!-- Side Widget Well -->
+      <div class="well">
+	<h4>Side Widget Well</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus laudantium odit aliquam repellat tempore quos aspernatur vero.</p>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+  <hr>
+  <!-- Footer -->
+  <footer>
+    <div class="row">
+      <div class="col-lg-12">
+	<p>Copyright &copy; Your Website 2014</p>
+      </div>
+    </div>
+    <!-- /.row -->
+  </footer>
+{% endblock %}

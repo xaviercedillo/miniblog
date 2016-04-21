@@ -1,0 +1,8 @@
+mini_blog:
+    resource: "@MiniBlogBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation

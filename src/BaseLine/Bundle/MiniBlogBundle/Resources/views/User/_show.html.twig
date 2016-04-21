@@ -1,0 +1,30 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Usuario:</h4>
+        </div>
+        <div class="modal-body">
+            <div>
+                <label>Name:</label>
+                {{ user.name }}
+            </div>
+            <div>
+                <label>Biography:</label>
+                {{ user.biography }}
+            </div>
+            <div>
+                <label>Email:</label>
+                {{ user.email }}
+            </div>
+            <div>
+                <label>Birthdate:</label>
+                {% if user.birthdate %}{{ user.birthdate|date('Y-m-d H:i:s') }}{% endif %}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            
+        </div>
+    </div>
+</div>
