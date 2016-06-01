@@ -1,5 +1,5 @@
 # Miniblog
-Este curso es para que podamos aprender sobre el versionado de los merge en el branch. Para ello, buscaremos la mejor manera de acuerdo a los cambios con los usuarios, asuntos internos e interesados.
+Este curso es para que podamos aprender sobre el versionado de los merge en el branch. Para ello, ejecutaremos un ejemplo para entrar en conflicto y veremos cual es la situación sobre esto. Gracias.
 
 ## Prerequisites
 + [Git](http://git-scm.com/)
