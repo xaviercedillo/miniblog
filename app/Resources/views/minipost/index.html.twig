@@ -3,10 +3,10 @@
 {% block body %}
     <h1>Minipost list</h1>
 
-    <table>
+    <table border=10>
         <thead>
             <tr>
-                <th>Id</th>
+                
                 <th>Title</th>
                 <th>Content</th>
                 <th>Createdat</th>
@@ -17,7 +17,7 @@
         <tbody>
         {% for minipost in miniposts %}
             <tr>
-                <td><a href="{{ path('minipost_show', { 'id': minipost.id }) }}">{{ minipost.id }}</a></td>
+               
                 <td>{{ minipost.title }}</td>
                 <td>{{ minipost.content }}</td>
                 <td>{% if minipost.createdAt %}{{ minipost.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
