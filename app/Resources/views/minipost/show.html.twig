@@ -97,7 +97,7 @@
         <a href="{{ path('minipost_edit', { 'id': minipost.id }) }}">Edit</a> |
         <a href="{{ path('minipost_index') }}">Back to the list</a>
         {{ form_start(delete_form) }}
-            <input type="submit" value="Delete">
+            <input class='btn btn-success' type="submit" value="Delete">
         {{ form_end(delete_form) }}
     </p>
     <hr>
