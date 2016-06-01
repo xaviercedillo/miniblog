@@ -1,5 +1,5 @@
 # Miniblog
-A simple test app in symfony.
+Este curso es para que podamos aprender sobre el versionado de los merge en el branch. Para ello, buscaremos la mejor manera de acuerdo a los cambios con los usuarios, asuntos internos e interesados.
 
 ## Prerequisites
 + [Git](http://git-scm.com/)
