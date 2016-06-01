@@ -16,7 +16,7 @@ use \Symfony\Component\Form\Extension\Core\Type\TextType;
 /**
  * Minipost controller.
  *
- * @Route("/minipost")
+ * @Route("/")
  */
 class MinipostController extends Controller
 {
